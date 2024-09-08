@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 #pragma once
 
-#include "WebApi_battery.h"
+// #include "WebApi_battery.h"
 #include "WebApi_config.h"
 #include "WebApi_device.h"
 #include "WebApi_devinfo.h"
@@ -26,11 +26,11 @@
 #include "WebApi_ws_console.h"
 #include "WebApi_ws_live.h"
 #include <AsyncJson.h>
-#include "WebApi_ws_vedirect_live.h"
-#include "WebApi_vedirect.h"
-#include "WebApi_ws_Huawei.h"
-#include "WebApi_Huawei.h"
-#include "WebApi_ws_battery.h"
+// #include "WebApi_ws_vedirect_live.h"
+// #include "WebApi_vedirect.h"
+// #include "WebApi_ws_Huawei.h"
+// #include "WebApi_Huawei.h"
+// #include "WebApi_ws_battery.h"
 #include <ESPAsyncWebServer.h>
 #include <TaskSchedulerDeclarations.h>
 
@@ -53,7 +53,7 @@ public:
 private:
     AsyncWebServer _server;
 
-    WebApiBatteryClass _webApiBattery;
+    // WebApiBatteryClass _webApiBattery;
     WebApiConfigClass _webApiConfig;
     WebApiDeviceClass _webApiDevice;
     WebApiDevInfoClass _webApiDevInfo;
@@ -76,11 +76,11 @@ private:
     WebApiWebappClass _webApiWebapp;
     WebApiWsConsoleClass _webApiWsConsole;
     WebApiWsLiveClass _webApiWsLive;
-    WebApiWsVedirectLiveClass _webApiWsVedirectLive;
-    WebApiVedirectClass _webApiVedirect;
-    WebApiHuaweiClass _webApiHuaweiClass;
-    WebApiWsHuaweiLiveClass _webApiWsHuaweiLive;
-    WebApiWsBatteryLiveClass _webApiWsBatteryLive;
+    // WebApiWsVedirectLiveClass _webApiWsVedirectLive;
+    // WebApiVedirectClass _webApiVedirect;
+    // WebApiHuaweiClass _webApiHuaweiClass;
+    // WebApiWsHuaweiLiveClass _webApiWsHuaweiLive;
+    // WebApiWsBatteryLiveClass _webApiWsBatteryLive;
 };
 
 extern WebApiClass WebApi;

@@ -40,6 +40,14 @@
 
                 <InputElement
                     v-show="isEnabled()"
+                    :label="$t('powerlimiteradmin.LoadBalancing')"
+                    v-model="powerLimiterConfigList.load_balancing"
+                    type="checkbox"
+                    wide
+                />
+
+                <InputElement
+                    v-show="isEnabled()"
                     :label="$t('powerlimiteradmin.VerboseLogging')"
                     v-model="powerLimiterConfigList.verbose_logging"
                     type="checkbox"

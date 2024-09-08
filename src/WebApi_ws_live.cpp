@@ -7,10 +7,10 @@
 #include "MessageOutput.h"
 #include "Utils.h"
 #include "WebApi.h"
-#include "Battery.h"
-#include "Huawei_can.h"
+// #include "Battery.h"
+// #include "Huawei_can.h"
 #include "PowerMeter.h"
-#include "VictronMppt.h"
+// #include "VictronMppt.h"
 #include "defaults.h"
 #include <AsyncJson.h>
 
@@ -58,71 +58,19 @@ void WebApiWsLiveClass::generateOnBatteryJsonResponse(JsonVariant& root, bool al
 {
     auto const& config = Configuration.get();
     auto constexpr halfOfAllMillis = std::numeric_limits<uint32_t>::max() / 2;
-
-    auto victronAge = VictronMppt.getDataAgeMillis();
-    if (all || (victronAge > 0 && (millis() - _lastPublishVictron) > victronAge)) {
-        auto vedirectObj = root["vedirect"].to<JsonObject>();
-        vedirectObj["enabled"] = config.Vedirect.Enabled;
-
-        if (config.Vedirect.Enabled) {
-            auto totalVeObj = vedirectObj["total"].to<JsonObject>();
-            addTotalField(totalVeObj, "Power", VictronMppt.getPanelPowerWatts(), "W", 1);
-            addTotalField(totalVeObj, "YieldDay", VictronMppt.getYieldDay() * 1000, "Wh", 0);
-            addTotalField(totalVeObj, "YieldTotal", VictronMppt.getYieldTotal(), "kWh", 2);
-        }
-
-        if (!all) { _lastPublishVictron = millis(); }
-    }
-
-    if (all || (HuaweiCan.getLastUpdate() - _lastPublishHuawei) < halfOfAllMillis ) {
-        auto huaweiObj = root["huawei"].to<JsonObject>();
-        huaweiObj["enabled"] = config.Huawei.Enabled;
-
-        if (config.Huawei.Enabled) {
-            const RectifierParameters_t * rp = HuaweiCan.get();
-            addTotalField(huaweiObj, "Power", rp->input_power, "W", 2);
-        }
-
-        if (!all) { _lastPublishHuawei = millis(); }
-    }
-
-    auto spStats = Battery.getStats();
-    if (all || spStats->updateAvailable(_lastPublishBattery)) {
-        auto batteryObj = root["battery"].to<JsonObject>();
-        batteryObj["enabled"] = config.Battery.Enabled;
-
-        if (config.Battery.Enabled) {
-            if (spStats->isSoCValid()) {
-                addTotalField(batteryObj, "soc", spStats->getSoC(), "%", spStats->getSoCPrecision());
-            }
-
-            if (spStats->isVoltageValid()) {
-                addTotalField(batteryObj, "voltage", spStats->getVoltage(), "V", 2);
-            }
-
-            if (spStats->isCurrentValid()) {
-                addTotalField(batteryObj, "current", spStats->getChargeCurrent(), "A", spStats->getChargeCurrentPrecision());
-            }
-
-            if (spStats->isVoltageValid() && spStats->isCurrentValid()) {
-                addTotalField(batteryObj, "power", spStats->getVoltage() * spStats->getChargeCurrent(), "W", 1);
-            }
-        }
-
-        if (!all) { _lastPublishBattery = millis(); }
-    }
-
     if (all || (PowerMeter.getLastUpdate() - _lastPublishPowerMeter) < halfOfAllMillis) {
         auto powerMeterObj = root["power_meter"].to<JsonObject>();
         powerMeterObj["enabled"] = config.PowerMeter.Enabled;
 
         if (config.PowerMeter.Enabled) {
             addTotalField(powerMeterObj, "Power", PowerMeter.getPowerTotal(), "W", 1);
+        
         }
-
-        if (!all) { _lastPublishPowerMeter = millis(); }
+        if (!all) {
+            _lastPublishPowerMeter = millis();
+        }
     }
-}
+ }
 
 void WebApiWsLiveClass::sendOnBatteryStats()
 {
@@ -207,6 +155,7 @@ void WebApiWsLiveClass::generateCommonJsonResponse(JsonVariant& root)
     hintObj["time_sync"] = !getLocalTime(&timeinfo, 5);
     hintObj["radio_problem"] = (Hoymiles.getRadioNrf()->isInitialized() && (!Hoymiles.getRadioNrf()->isConnected() || !Hoymiles.getRadioNrf()->isPVariant())) || (Hoymiles.getRadioCmt()->isInitialized() && (!Hoymiles.getRadioCmt()->isConnected()));
     hintObj["default_password"] = strcmp(Configuration.get().Security.Password, ACCESS_POINT_PASSWORD) == 0;
+    hintObj["load_balancing"] = Configuration.get().PowerLimiter.DistributeLoad;
 }
 
 void WebApiWsLiveClass::generateInverterCommonJsonResponse(JsonObject& root, std::shared_ptr<InverterAbstract> inv)

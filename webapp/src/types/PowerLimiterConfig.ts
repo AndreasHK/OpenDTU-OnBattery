@@ -21,6 +21,7 @@ export interface PowerLimiterMetaData {
 export interface PowerLimiterConfig {
     enabled: boolean;
     verbose_logging: boolean;
+    load_balancing: boolean;
     solar_passthrough_enabled: boolean;
     solar_passthrough_losses: number;
     battery_always_use_at_night: boolean;

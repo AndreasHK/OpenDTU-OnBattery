@@ -28,6 +28,7 @@ public:
     std::shared_ptr<InverterAbstract> getInverterByPos(const uint8_t pos);
     std::shared_ptr<InverterAbstract> getInverterBySerial(const uint64_t serial);
     std::shared_ptr<InverterAbstract> getInverterByFragment(const fragment_t& fragment);
+    size_t getPosForSerial(const uint64_t serial) const;
     void removeInverterBySerial(const uint64_t serial);
     size_t getNumInverters() const;
 
@@ -39,6 +40,8 @@ public:
     void setVerboseLogging(bool verboseLogging);
 
     bool isAllRadioIdle() const;
+
+    uint16_t getSumOfAll() const;
 
 private:
     std::vector<std::shared_ptr<InverterAbstract>> _inverters;

@@ -35,14 +35,14 @@ void WebApiClass::init(Scheduler& scheduler)
     _webApiWebapp.init(_server, scheduler);
     _webApiWsConsole.init(_server, scheduler);
     _webApiWsLive.init(_server, scheduler);
-    _webApiBattery.init(_server, scheduler);
+    // _webApiBattery.init(_server, scheduler);
     _webApiPowerMeter.init(_server, scheduler);
     _webApiPowerLimiter.init(_server, scheduler);
-    _webApiWsVedirectLive.init(_server, scheduler);
-    _webApiVedirect.init(_server, scheduler);
-    _webApiWsHuaweiLive.init(_server, scheduler);
-    _webApiHuaweiClass.init(_server, scheduler);
-    _webApiWsBatteryLive.init(_server, scheduler);
+    // _webApiWsVedirectLive.init(_server, scheduler);
+    // _webApiVedirect.init(_server, scheduler);
+    // _webApiWsHuaweiLive.init(_server, scheduler);
+    // _webApiHuaweiClass.init(_server, scheduler);
+    // _webApiWsBatteryLive.init(_server, scheduler);
 
     _server.begin();
 }

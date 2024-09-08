@@ -82,8 +82,10 @@ void MqttHandlePowerLimiterClass::loop()
 
     MqttSettings.publish("powerlimiter/status/target_power_consumption", String(config.PowerLimiter.TargetPowerConsumption));
 
-    MqttSettings.publish("powerlimiter/status/inverter_update_timeouts", String(PowerLimiter.getInverterUpdateTimeouts()));
-
+            for (size_t i = 0; i < Hoymiles.getNumInverters(); i++){
+            String topic = "powerlimiter/status/inverter_update_timeouts" + String(i);
+            MqttSettings.publish(topic, String(PowerLimiter.getInverterUpdateTimeouts(i)));
+        }
     // no thresholds are relevant for setups without a battery
     if (config.PowerLimiter.IsInverterSolarPowered) { return; }
 
@@ -91,7 +93,10 @@ void MqttHandlePowerLimiterClass::loop()
     MqttSettings.publish("powerlimiter/status/threshold/voltage/stop", String(config.PowerLimiter.VoltageStopThreshold));
 
     if (config.Vedirect.Enabled) {
-        MqttSettings.publish("powerlimiter/status/full_solar_passthrough_active", String(PowerLimiter.getFullSolarPassThroughEnabled()));
+        for (size_t i = 0; i < Hoymiles.getNumInverters(); i++){
+            String topic = "powerlimiter/status/full_solar_passthrough_active/" + String(i);
+            MqttSettings.publish(topic, String(PowerLimiter.getFullSolarPassThroughEnabled(i)));
+        }
         MqttSettings.publish("powerlimiter/status/threshold/voltage/full_solar_passthrough_start", String(config.PowerLimiter.FullSolarPassThroughStartVoltage));
         MqttSettings.publish("powerlimiter/status/threshold/voltage/full_solar_passthrough_stop", String(config.PowerLimiter.FullSolarPassThroughStopVoltage));
     }

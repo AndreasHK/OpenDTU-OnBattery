@@ -148,7 +148,7 @@ void WebApiInverterClass::onInverterAdd(AsyncWebServerRequest* request)
         }
     }
 
-    MqttHandleHass.forceUpdate();
+    // MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
@@ -264,7 +264,7 @@ void WebApiInverterClass::onInverterEdit(AsyncWebServerRequest* request)
         }
     }
 
-    MqttHandleHass.forceUpdate();
+    // MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
@@ -306,7 +306,7 @@ void WebApiInverterClass::onInverterDelete(AsyncWebServerRequest* request)
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 
-    MqttHandleHass.forceUpdate();
+    // MqttHandleHass.forceUpdate();
 }
 
 void WebApiInverterClass::onInverterOrder(AsyncWebServerRequest* request)

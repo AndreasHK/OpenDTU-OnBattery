@@ -621,6 +621,7 @@
         "General": "Allgemein",
         "Enable": "Aktiviert",
         "VerboseLogging": "@:base.VerboseLogging",
+        "LoadBalancing":"Verteile Last",
         "SolarPassthrough": "Solar-Passthrough",
         "EnableSolarPassthrough": "Aktiviere Solar-Passthrough",
         "SolarPassthroughLosses": "(Full) Solar-Passthrough Verluste",

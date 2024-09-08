@@ -695,6 +695,7 @@
         "General": "General",
         "Enable": "Enable",
         "VerboseLogging": "@:base.VerboseLogging",
+        "LoadBalancing":"Balance Load",
         "SolarPassthrough": "Solar-Passthrough",
         "EnableSolarPassthrough": "Enable Solar-Passthrough",
         "SolarPassthroughLosses": "(Full) Solar-Passthrough Losses",

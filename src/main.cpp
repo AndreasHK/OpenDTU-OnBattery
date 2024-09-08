@@ -9,19 +9,19 @@
 #include "Led_Single.h"
 #include "MessageOutput.h"
 #include "SerialPortManager.h"
-#include "VictronMppt.h"
-#include "Battery.h"
-#include "Huawei_can.h"
+// #include "VictronMppt.h"
+// #include "Battery.h"
+// #include "Huawei_can.h"
 #include "MqttHandleDtu.h"
-#include "MqttHandleHass.h"
-#include "MqttHandleVedirectHass.h"
-#include "MqttHandleBatteryHass.h"
+// #include "MqttHandleHass.h"
+// #include "MqttHandleVedirectHass.h"
+// #include "MqttHandleBatteryHass.h"
 #include "MqttHandleInverter.h"
 #include "MqttHandleInverterTotal.h"
-#include "MqttHandleVedirect.h"
-#include "MqttHandleHuawei.h"
+// #include "MqttHandleVedirect.h"
+// #include "MqttHandleHuawei.h"
 #include "MqttHandlePowerLimiter.h"
-#include "MqttHandlePowerLimiterHass.h"
+// #include "MqttHandlePowerLimiterHass.h"
 #include "MqttSettings.h"
 #include "NetworkSettings.h"
 #include "NtpSettings.h"
@@ -121,13 +121,13 @@ void setup()
     MqttHandleDtu.init(scheduler);
     MqttHandleInverter.init(scheduler);
     MqttHandleInverterTotal.init(scheduler);
-    MqttHandleVedirect.init(scheduler);
-    MqttHandleHass.init(scheduler);
-    MqttHandleVedirectHass.init(scheduler);
-    MqttHandleBatteryHass.init(scheduler);
-    MqttHandleHuawei.init(scheduler);
+    // MqttHandleVedirect.init(scheduler);
+    // MqttHandleHass.init(scheduler);
+    // MqttHandleVedirectHass.init(scheduler);
+    // MqttHandleBatteryHass.init(scheduler);
+    // MqttHandleHuawei.init(scheduler);
     MqttHandlePowerLimiter.init(scheduler);
-    MqttHandlePowerLimiterHass.init(scheduler);
+    // MqttHandlePowerLimiterHass.init(scheduler);
     MessageOutput.println("done");
 
     // Initialize WebApi
@@ -176,7 +176,7 @@ void setup()
 
     Datastore.init(scheduler);
 
-    VictronMppt.init(scheduler);
+    // VictronMppt.init(scheduler);
 
     // Power meter
     PowerMeter.init(scheduler);
@@ -188,13 +188,13 @@ void setup()
     MessageOutput.println("Initialize Huawei AC charger interface... ");
     if (PinMapping.isValidHuaweiConfig()) {
         MessageOutput.printf("Huawei AC-charger miso = %d, mosi = %d, clk = %d, irq = %d, cs = %d, power_pin = %d\r\n", pin.huawei_miso, pin.huawei_mosi, pin.huawei_clk, pin.huawei_irq, pin.huawei_cs, pin.huawei_power);
-        HuaweiCan.init(scheduler, pin.huawei_miso, pin.huawei_mosi, pin.huawei_clk, pin.huawei_irq, pin.huawei_cs, pin.huawei_power);
+        // HuaweiCan.init(scheduler, pin.huawei_miso, pin.huawei_mosi, pin.huawei_clk, pin.huawei_irq, pin.huawei_cs, pin.huawei_power);
         MessageOutput.println("done");
     } else {
         MessageOutput.println("Invalid pin config");
     }
 
-    Battery.init(scheduler);
+    // Battery.init(scheduler);
 }
 
 void loop()

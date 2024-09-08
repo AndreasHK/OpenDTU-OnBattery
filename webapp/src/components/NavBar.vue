@@ -72,11 +72,6 @@
                                 }}</router-link>
                             </li>
                             <li>
-                                <router-link @click="onClick" class="dropdown-item" to="/settings/vedirect">{{
-                                    $t('menu.VedirectSettings')
-                                }}</router-link>
-                            </li>
-                            <li>
                                 <router-link @click="onClick" class="dropdown-item" to="/settings/powermeter">{{
                                     $t('menu.PowerMeterSettings')
                                 }}</router-link>
@@ -85,16 +80,6 @@
                                 <router-link @click="onClick" class="dropdown-item" to="/settings/powerlimiter"
                                     >Dynamic Power Limiter</router-link
                                 >
-                            </li>
-                            <li>
-                                <router-link @click="onClick" class="dropdown-item" to="/settings/battery">{{
-                                    $t('menu.BatterySettings')
-                                }}</router-link>
-                            </li>
-                            <li>
-                                <router-link @click="onClick" class="dropdown-item" to="/settings/chargerac">{{
-                                    $t('menu.AcChargerSettings')
-                                }}</router-link>
                             </li>
                             <li>
                                 <router-link @click="onClick" class="dropdown-item" to="/settings/device">{{
@@ -151,11 +136,6 @@
                             <li>
                                 <router-link @click="onClick" class="dropdown-item" to="/info/mqtt">{{
                                     $t('menu.MQTT')
-                                }}</router-link>
-                            </li>
-                            <li>
-                                <router-link @click="onClick" class="dropdown-item" to="/info/vedirect">{{
-                                    $t('menu.Vedirect')
                                 }}</router-link>
                             </li>
                             <li>

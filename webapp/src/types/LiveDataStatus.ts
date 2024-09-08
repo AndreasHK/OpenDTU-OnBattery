@@ -49,24 +49,6 @@ export interface Hints {
     radio_problem: boolean;
 }
 
-export interface Vedirect {
-    enabled: boolean;
-    total: Total;
-}
-
-export interface Huawei {
-    enabled: boolean;
-    Power: ValueObject;
-}
-
-export interface Battery {
-    enabled: boolean;
-    soc?: ValueObject;
-    voltage?: ValueObject;
-    power?: ValueObject;
-    current?: ValueObject;
-}
-
 export interface PowerMeter {
     enabled: boolean;
     Power: ValueObject;
@@ -76,8 +58,5 @@ export interface LiveData {
     inverters: Inverter[];
     total: Total;
     hints: Hints;
-    vedirect: Vedirect;
-    huawei: Huawei;
-    battery: Battery;
     power_meter: PowerMeter;
 }

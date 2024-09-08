@@ -7,7 +7,7 @@
 #include "ArduinoJson.h"
 #include "AsyncJson.h"
 #include "Configuration.h"
-#include "MqttHandlePowerLimiterHass.h"
+// #include "MqttHandlePowerLimiterHass.h"
 #include "PowerLimiter.h"
 #include "WebApi.h"
 #include "helper.h"
@@ -33,6 +33,7 @@ void WebApiPowerLimiterClass::onStatus(AsyncWebServerRequest* request)
 
     root["enabled"] = config.PowerLimiter.Enabled;
     root["verbose_logging"] = config.PowerLimiter.VerboseLogging;
+    root["load_balancing"] = config.PowerLimiter.DistributeLoad;
     root["solar_passthrough_enabled"] = config.PowerLimiter.SolarPassThroughEnabled;
     root["solar_passthrough_losses"] = config.PowerLimiter.SolarPassThroughLosses;
     root["battery_always_use_at_night"] = config.PowerLimiter.BatteryAlwaysUseAtNight;
@@ -149,6 +150,7 @@ void WebApiPowerLimiterClass::onAdminPost(AsyncWebServerRequest* request)
     config.PowerLimiter.Enabled = root["enabled"].as<bool>();
     PowerLimiter.setMode(PowerLimiterClass::Mode::Normal);  // User input sets PL to normal operation
     config.PowerLimiter.VerboseLogging = root["verbose_logging"].as<bool>();
+    config.PowerLimiter.DistributeLoad = root["load_balancing"].as<bool>();
 
     if (config.Vedirect.Enabled) {
         config.PowerLimiter.SolarPassThroughEnabled = root["solar_passthrough_enabled"].as<bool>();
@@ -193,5 +195,5 @@ void WebApiPowerLimiterClass::onAdminPost(AsyncWebServerRequest* request)
     PowerLimiter.calcNextInverterRestart();
 
     // potentially make thresholds auto-discoverable
-    MqttHandlePowerLimiterHass.forceUpdate();
+    // MqttHandlePowerLimiterHass.forceUpdate();
 }

@@ -4,10 +4,10 @@
  */
 #include "WebApi_mqtt.h"
 #include "Configuration.h"
-#include "MqttHandleHass.h"
+// #include "MqttHandleHass.h"
 #include "MqttHandleInverter.h"
-#include "MqttHandleVedirectHass.h"
-#include "MqttHandleVedirect.h"
+// #include "MqttHandleVedirectHass.h"
+// #include "MqttHandleVedirect.h"
 #include "MqttSettings.h"
 #include "WebApi.h"
 #include "WebApi_errors.h"
@@ -51,11 +51,11 @@ void WebApiMqttClass::onMqttStatus(AsyncWebServerRequest* request)
     root["mqtt_lwt_topic"] = String(config.Mqtt.Topic) + config.Mqtt.Lwt.Topic;
     root["mqtt_publish_interval"] = config.Mqtt.PublishInterval;
     root["mqtt_clean_session"] = config.Mqtt.CleanSession;
-    root["mqtt_hass_enabled"] = config.Mqtt.Hass.Enabled;
-    root["mqtt_hass_expire"] = config.Mqtt.Hass.Expire;
-    root["mqtt_hass_retain"] = config.Mqtt.Hass.Retain;
-    root["mqtt_hass_topic"] = config.Mqtt.Hass.Topic;
-    root["mqtt_hass_individualpanels"] = config.Mqtt.Hass.IndividualPanels;
+    // root["mqtt_hass_enabled"] = config.Mqtt.Hass.Enabled;
+    // root["mqtt_hass_expire"] = config.Mqtt.Hass.Expire;
+    // root["mqtt_hass_retain"] = config.Mqtt.Hass.Retain;
+    // root["mqtt_hass_topic"] = config.Mqtt.Hass.Topic;
+    // root["mqtt_hass_individualpanels"] = config.Mqtt.Hass.IndividualPanels;
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 }
@@ -90,11 +90,11 @@ void WebApiMqttClass::onMqttAdminGet(AsyncWebServerRequest* request)
     root["mqtt_lwt_qos"] = config.Mqtt.Lwt.Qos;
     root["mqtt_publish_interval"] = config.Mqtt.PublishInterval;
     root["mqtt_clean_session"] = config.Mqtt.CleanSession;
-    root["mqtt_hass_enabled"] = config.Mqtt.Hass.Enabled;
-    root["mqtt_hass_expire"] = config.Mqtt.Hass.Expire;
-    root["mqtt_hass_retain"] = config.Mqtt.Hass.Retain;
-    root["mqtt_hass_topic"] = config.Mqtt.Hass.Topic;
-    root["mqtt_hass_individualpanels"] = config.Mqtt.Hass.IndividualPanels;
+    // root["mqtt_hass_enabled"] = config.Mqtt.Hass.Enabled;
+    // root["mqtt_hass_expire"] = config.Mqtt.Hass.Expire;
+    // root["mqtt_hass_retain"] = config.Mqtt.Hass.Retain;
+    // root["mqtt_hass_topic"] = config.Mqtt.Hass.Topic;
+    // root["mqtt_hass_individualpanels"] = config.Mqtt.Hass.IndividualPanels;
 
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 }
@@ -132,11 +132,12 @@ void WebApiMqttClass::onMqttAdminPost(AsyncWebServerRequest* request)
             && root.containsKey("mqtt_lwt_qos")
             && root.containsKey("mqtt_publish_interval")
             && root.containsKey("mqtt_clean_session")
-            && root.containsKey("mqtt_hass_enabled")
-            && root.containsKey("mqtt_hass_expire")
-            && root.containsKey("mqtt_hass_retain")
-            && root.containsKey("mqtt_hass_topic")
-            && root.containsKey("mqtt_hass_individualpanels"))) {
+            // && root.containsKey("mqtt_hass_enabled")
+            // && root.containsKey("mqtt_hass_expire")
+            // && root.containsKey("mqtt_hass_retain")
+            // && root.containsKey("mqtt_hass_topic")
+            // && root.containsKey("mqtt_hass_individualpanels")
+            )) {
         retMsg["message"] = "Values are missing!";
         retMsg["code"] = WebApiError::GenericValueMissing;
         WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
@@ -260,22 +261,22 @@ void WebApiMqttClass::onMqttAdminPost(AsyncWebServerRequest* request)
             return;
         }
 
-        if (root["mqtt_hass_enabled"].as<bool>()) {
-            if (root["mqtt_hass_topic"].as<String>().length() > MQTT_MAX_TOPIC_STRLEN) {
-                retMsg["message"] = "Hass topic must not be longer than " STR(MQTT_MAX_TOPIC_STRLEN) " characters!";
-                retMsg["code"] = WebApiError::MqttHassTopicLength;
-                retMsg["param"]["max"] = MQTT_MAX_TOPIC_STRLEN;
-                WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
-                return;
-            }
+        // if (root["mqtt_hass_enabled"].as<bool>()) {
+        //     if (root["mqtt_hass_topic"].as<String>().length() > MQTT_MAX_TOPIC_STRLEN) {
+        //         retMsg["message"] = "Hass topic must not be longer than " STR(MQTT_MAX_TOPIC_STRLEN) " characters!";
+        //         retMsg["code"] = WebApiError::MqttHassTopicLength;
+        //         retMsg["param"]["max"] = MQTT_MAX_TOPIC_STRLEN;
+        //         WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
+        //         return;
+        //     }
 
-            if (root["mqtt_hass_topic"].as<String>().indexOf(' ') != -1) {
-                retMsg["message"] = "Hass topic must not contain space characters!";
-                retMsg["code"] = WebApiError::MqttHassTopicCharacter;
-                WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
-                return;
-            }
-        }
+        //     if (root["mqtt_hass_topic"].as<String>().indexOf(' ') != -1) {
+        //         retMsg["message"] = "Hass topic must not contain space characters!";
+        //         retMsg["code"] = WebApiError::MqttHassTopicCharacter;
+        //         WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
+        //         return;
+        //     }
+        // }
     }
 
     CONFIG_T& config = Configuration.get();
@@ -298,11 +299,11 @@ void WebApiMqttClass::onMqttAdminPost(AsyncWebServerRequest* request)
     config.Mqtt.Lwt.Qos = root["mqtt_lwt_qos"].as<uint8_t>();
     config.Mqtt.PublishInterval = root["mqtt_publish_interval"].as<uint32_t>();
     config.Mqtt.CleanSession = root["mqtt_clean_session"].as<bool>();
-    config.Mqtt.Hass.Enabled = root["mqtt_hass_enabled"].as<bool>();
-    config.Mqtt.Hass.Expire = root["mqtt_hass_expire"].as<bool>();
-    config.Mqtt.Hass.Retain = root["mqtt_hass_retain"].as<bool>();
-    config.Mqtt.Hass.IndividualPanels = root["mqtt_hass_individualpanels"].as<bool>();
-    strlcpy(config.Mqtt.Hass.Topic, root["mqtt_hass_topic"].as<String>().c_str(), sizeof(config.Mqtt.Hass.Topic));
+    // config.Mqtt.Hass.Enabled = root["mqtt_hass_enabled"].as<bool>();
+    // config.Mqtt.Hass.Expire = root["mqtt_hass_expire"].as<bool>();
+    // config.Mqtt.Hass.Retain = root["mqtt_hass_retain"].as<bool>();
+    // config.Mqtt.Hass.IndividualPanels = root["mqtt_hass_individualpanels"].as<bool>();
+    // strlcpy(config.Mqtt.Hass.Topic, root["mqtt_hass_topic"].as<String>().c_str(), sizeof(config.Mqtt.Hass.Topic));
 
     // Check if base topic was changed
     if (strcmp(config.Mqtt.Topic, root["mqtt_topic"].as<String>().c_str())) {
@@ -316,9 +317,9 @@ void WebApiMqttClass::onMqttAdminPost(AsyncWebServerRequest* request)
     WebApi.sendJsonResponse(request, response, __FUNCTION__, __LINE__);
 
     MqttSettings.performReconnect();
-    MqttHandleHass.forceUpdate();
-    MqttHandleVedirectHass.forceUpdate();
-    MqttHandleVedirect.forceUpdate();
+    // MqttHandleHass.forceUpdate();
+    // MqttHandleVedirectHass.forceUpdate();
+    // MqttHandleVedirect.forceUpdate();
 }
 
 String WebApiMqttClass::getTlsCertInfo(const char* cert)

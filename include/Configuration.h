@@ -275,6 +275,7 @@ struct CONFIG_T {
         uint32_t FullSolarPassThroughSoc;
         float FullSolarPassThroughStartVoltage;
         float FullSolarPassThroughStopVoltage;
+        bool DistributeLoad = false;
     } PowerLimiter;
 
     struct {

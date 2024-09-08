@@ -208,6 +208,26 @@ std::shared_ptr<InverterAbstract> HoymilesClass::getInverterBySerial(const uint6
     return nullptr;
 }
 
+size_t HoymilesClass::getPosForSerial(const uint64_t serial) const {
+     for (uint8_t i = 0; i < _inverters.size(); i++) {
+        if (_inverters[i]->serial() == serial) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+
+uint16_t HoymilesClass::getSumOfAll() const{
+    uint16_t sum = 0;
+    for (uint8_t i = 0; i < _inverters.size(); i++) {
+        if (_inverters[i]->isProducing()){
+            sum += _inverters[i]->DevInfo()->getMaxPower();
+        }
+    }
+    return sum;
+}
+
 std::shared_ptr<InverterAbstract> HoymilesClass::getInverterByFragment(const fragment_t& fragment)
 {
     if (fragment.len <= 4) {
