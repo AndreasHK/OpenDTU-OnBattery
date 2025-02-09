@@ -41,7 +41,8 @@ public:
 
     bool isAllRadioIdle() const;
 
-    uint16_t getSumOfAll() const;
+    uint16_t getMaxPowerOfAll() const;
+    int16_t getCurrentLoadOfAll() const;
 
 private:
     std::vector<std::shared_ptr<InverterAbstract>> _inverters;

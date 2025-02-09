@@ -70,6 +70,8 @@ void PowerLimiterClass::announceStatus(PowerLimiterClass::Status status)
     // should just be silent while it is disabled.
     if (status == Status::DisabledByConfig && _lastStatus == status) { return; }
 
+
+
     MessageOutput.printf("[DPL::announceStatus] %s\r\n",
         getStatusText(status).data());
 
@@ -122,11 +124,11 @@ void PowerLimiterClass::loop(){
             MessageOutput.println("[DPL::loop] InverterBySerial failed, try position");
             currentInverter = Hoymiles.getInverterByPos(config.PowerLimiter.InverterId);
         }
-        loopOne(&_settings[Hoymiles.getPosForSerial(currentInverter->serial())], currentInverter, 0);
+        loopOne(&_settings[Hoymiles.getPosForSerial(currentInverter->serial())], currentInverter, 0, 0);
     }
 }
 
-void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<InverterAbstract> currentInverter, int16_t maxPower){
+void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<InverterAbstract> currentInverter, int16_t maxPower, int16_t currentLoad){
         CONFIG_T const& config = Configuration.get();
         _currentSettings = currentSettings;
         _currentSettings->_inverter = currentInverter;
@@ -149,7 +151,9 @@ void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<In
             _currentSettings->_inverter = nullptr;
         }
 
-        MessageOutput.println("[DPL::loop] checking pending shutdown");
+        if (config.PowerLimiter.VerboseLogging) {
+            MessageOutput.println("[DPL::loop] checking pending shutdown");
+        }
         if (!config.PowerLimiter.Enabled) {
             shutdown(Status::DisabledByConfig);
             return;
@@ -249,6 +253,10 @@ void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<In
             MessageOutput.println("[DPL::loop] ******************* ENTER **********************");
         }
 
+        if (maxPower != 0 || currentLoad != 0){
+            MessageOutput.printf("[DPL::loop] Maximum available: %i W, currently used: %i W\r\n", maxPower, currentLoad);
+        }
+
         // Check if next inverter restart time is reached
         if ((_currentSettings->_nextInverterRestart > 1) && (_currentSettings->_nextInverterRestart <= millis())) {
             MessageOutput.println("[DPL::loop] send inverter restart");
@@ -316,9 +324,9 @@ void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<In
         // Calculate and set Power Limit (NOTE: might reset _inverter to nullptr!)
         bool limitUpdated = false;
         if (maxPower == 0){
-            limitUpdated = calcPowerLimit(_currentSettings->_inverter, getSolarPower(), _currentSettings->_batteryDischargeEnabled, 1.0);
+            limitUpdated = calcPowerLimit(_currentSettings->_inverter, getSolarPower(), _currentSettings->_batteryDischargeEnabled, 1.0, 0);
         } else {
-            limitUpdated = calcPowerLimit(_currentSettings->_inverter, getSolarPower(), _currentSettings->_batteryDischargeEnabled, 1.0*_currentSettings->_inverter->DevInfo()->getMaxPower() / maxPower);
+            limitUpdated = calcPowerLimit(_currentSettings->_inverter, getSolarPower(), _currentSettings->_batteryDischargeEnabled, 1.0*_currentSettings->_inverter->DevInfo()->getMaxPower() / maxPower, currentLoad);
         }
 
         _currentSettings->_lastCalculation = millis();
@@ -334,11 +342,12 @@ void PowerLimiterClass::loopOne(DPLSettings* currentSettings, std::shared_ptr<In
 
 void PowerLimiterClass::loopAll()
 {
+    auto maxPower = Hoymiles.getMaxPowerOfAll();
+    auto currentLoad = Hoymiles.getCurrentLoadOfAll();
+
     for (size_t i = 0; i < Hoymiles.getNumInverters(); i++) {
         auto currentInverter = Hoymiles.getInverterByPos(i);
-        auto maxPower = static_cast<float>(Hoymiles.getSumOfAll());
-
-        loopOne(&_settings[i], currentInverter, maxPower);
+        loopOne(&_settings[i], currentInverter, maxPower, currentLoad);
     }
 }
 
@@ -470,7 +479,7 @@ uint8_t PowerLimiterClass::getPowerLimiterState() {
 // | 3      | true         | doesn't matter | false                   | PowerMeter value (Battery can supply unlimited energy) |
 // | 4      | true         | fully passed   | true                    | max(PowerMeter value, solarPower)                      |
 
-bool PowerLimiterClass::calcPowerLimit(std::shared_ptr<InverterAbstract> inverter, int32_t solarPowerDC, bool batteryPower, float loadFactor)
+bool PowerLimiterClass::calcPowerLimit(std::shared_ptr<InverterAbstract> inverter, int32_t solarPowerDC, bool batteryPower, float loadFactor, int16_t currentLoad)
 {
     if (_verboseLogging) {
         MessageOutput.printf("[DPL::calcPowerLimit] battery use %s, solar power (DC): %d W, load factor: %f\r\n",
@@ -498,6 +507,7 @@ bool PowerLimiterClass::calcPowerLimit(std::shared_ptr<InverterAbstract> inverte
     // We don't use FLD_PAC from the statistics, because that data might be too
     // old and unreliable. TODO(schlimmchen): is this comment outdated?
     auto inverterOutput = static_cast<int32_t>(inverter->Statistics()->getChannelFieldValue(TYPE_AC, CH0, FLD_PAC));
+    inverterOutput = std::max<int32_t>(inverterOutput, currentLoad);
 
     auto solarPowerAC = inverterPowerDcToAc(inverter, solarPowerDC);
 

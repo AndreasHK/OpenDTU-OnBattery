@@ -80,7 +80,7 @@ private:
 
     void loop();
     void loopAll();
-    void loopOne(DPLSettings* _currentSettings, std::shared_ptr<InverterAbstract> currentInverter, int16_t maxPower);
+    void loopOne(DPLSettings* _currentSettings, std::shared_ptr<InverterAbstract> currentInverter, int16_t maxPower, int16_t currentLoad);
 
     Task _loopTask;
 
@@ -104,7 +104,7 @@ private:
     int32_t inverterPowerDcToAc(std::shared_ptr<InverterAbstract> inverter, int32_t dcPower);
     void unconditionalSolarPassthrough(std::shared_ptr<InverterAbstract> inverter);
     // bool canUseDirectSolarPower();
-    bool calcPowerLimit(std::shared_ptr<InverterAbstract> inverter, int32_t solarPower, bool batteryPower, float loadFactor);
+    bool calcPowerLimit(std::shared_ptr<InverterAbstract> inverter, int32_t solarPower, bool batteryPower, float loadFactor, int16_t currentLoad);
     bool updateInverter();
     bool setNewPowerLimit(std::shared_ptr<InverterAbstract> inverter, int32_t newPowerLimit);
     int32_t getSolarPower();

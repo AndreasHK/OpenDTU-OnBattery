@@ -218,7 +218,18 @@ size_t HoymilesClass::getPosForSerial(const uint64_t serial) const {
 }
 
 
-uint16_t HoymilesClass::getSumOfAll() const{
+int16_t HoymilesClass::getCurrentLoadOfAll() const {
+    int16_t sum = 0;
+    for (uint8_t i = 0; i < _inverters.size(); i++) {
+        if (_inverters[i]->isProducing()){
+            sum += static_cast<int16_t>(_inverters[i]->Statistics()->getChannelFieldValue(TYPE_AC, CH0, FLD_PAC));
+        }
+    }
+    return sum;
+}
+
+
+uint16_t HoymilesClass::getMaxPowerOfAll() const{
     uint16_t sum = 0;
     for (uint8_t i = 0; i < _inverters.size(); i++) {
         if (_inverters[i]->isProducing()){
